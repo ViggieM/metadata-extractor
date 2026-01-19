@@ -1,0 +1,21 @@
+{
+  "patterns": [
+    {
+      "match": ["youtube.com", "google.com"],
+      "cookies": [
+        {
+          "name": "CONSENT",
+          "value": "YES+cb.20210720-07-p0.en+FX+410",
+          "domain": ".youtube.com",
+          "path": "/"
+        },
+        {
+          "name": "SOCS",
+          "value": "CAISHAgBEhJnd3NfMjAyMzA4MTAtMF9SQzIaAmVuIAEaBgiAo_CmBg",
+          "domain": ".youtube.com",
+          "path": "/"
+        }
+      ]
+    }
+  ]
+}
