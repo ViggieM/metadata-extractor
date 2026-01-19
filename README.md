@@ -73,6 +73,57 @@ Overview:
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window |
 | `CONSENT_COOKIES_PATH` | `config/consent-cookies.json` | Cookie bypass config |
 | `API_KEY` | (none) | Optional API key; if set, requires `Authorization: Bearer <key>` header |
+| `CLOUDFLARE_TUNNEL_TOKEN` | (none) | Cloudflare Tunnel token for production deployment |
+| `API_HOST` | (none) | Public hostname for Traefik routing (e.g., `metadata.yourdomain.com`) |
+
+## Production Deployment with Cloudflare Zero Trust
+
+The service includes Traefik reverse proxy and Cloudflare Tunnel for secure production deployment. Local port access (`:3000`) remains available for development.
+
+### Architecture
+
+```
+Local dev:   localhost:3000 → API Container → Chrome Container
+
+Production:  Internet → Cloudflare Tunnel → Traefik → API Container → Chrome Container
+```
+
+### Setup Instructions
+
+1. Go to [Cloudflare Zero Trust dashboard](https://one.dash.cloudflare.com/)
+2. Navigate to **Networks → Tunnels → Create a tunnel**
+3. Select **Cloudflared** connector type
+4. Name your tunnel (e.g., `metadata-extractor`)
+5. Copy the tunnel token and add it to your `.env` file:
+   ```bash
+   CLOUDFLARE_TUNNEL_TOKEN=your-token-here
+   ```
+6. In the tunnel configuration, add a **Public Hostname**:
+   - **Subdomain**: your choice (e.g., `metadata`)
+   - **Domain**: select your Cloudflare domain
+   - **Service Type**: HTTP
+   - **URL**: `traefik:80`
+7. Update `API_HOST` in `.env` to match your hostname:
+   ```bash
+   API_HOST=metadata.yourdomain.com
+   ```
+8. Start the service:
+   ```bash
+   docker compose up -d
+   ```
+
+### Verification
+
+```bash
+# Check all containers are running
+docker compose ps
+
+# Test local access
+curl http://localhost:3000/health
+
+# Test tunnel access
+curl https://metadata.yourdomain.com/health
+```
 
 ## TODOs
 - **Prometheus metrics** - Request counts, latencies, error rates
