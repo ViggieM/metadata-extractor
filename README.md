@@ -10,6 +10,7 @@ Features:
 - SSRF protection with DNS caching and IP range validation
 - Bot detection evasion and GDPR consent handling
 - Rate limiting
+- Optional API key authentication
 
 Not implemented:
 - reuse persistent browser connection
@@ -27,10 +28,16 @@ docker compose up -d
 curl -X POST http://localhost:3000/process \
   -H "Content-Type: application/json" \
   -d '{"url": "https://example.com"}'
-  
+
 # Extract content from a URL
 curl -X POST http://localhost:3000/content \
   -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com"}'
+
+# With API key authentication (if API_KEY is set)
+curl -X POST http://localhost:3000/process \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-secret-api-key" \
   -d '{"url": "https://example.com"}'
 ```
 
@@ -65,10 +72,9 @@ Overview:
 | `RATE_LIMIT_REQUESTS` | `5` | Max requests per window |
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window |
 | `CONSENT_COOKIES_PATH` | `config/consent-cookies.json` | Cookie bypass config |
+| `API_KEY` | (none) | Optional API key; if set, requires `Authorization: Bearer <key>` header |
 
 ## TODOs
-
-- **Authentication** - Add API key auth (but make it optional)
 - **Prometheus metrics** - Request counts, latencies, error rates
 - **Structured logging** - Replace console.log with structured JSON logging for easier debugging and monitoring.
 - **Tests** - Unit tests for extractor, integration tests for API

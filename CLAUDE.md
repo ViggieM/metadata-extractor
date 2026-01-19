@@ -48,6 +48,7 @@ src/
 │   └── readability.ts# Mozilla Readability + DOMPurify sanitization
 └── security/
     ├── index.ts      # Barrel export
+    ├── apiKey.ts     # Optional API key authentication (Bearer token)
     ├── ssrf.ts       # SSRF protection: DNS resolution, IP range blocking
     └── rateLimit.ts  # Sliding window rate limiting per IP
 ```
@@ -70,6 +71,7 @@ src/
 | `RATE_LIMIT_REQUESTS` | `5` | Max requests per window |
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window |
 | `CONSENT_COOKIES_PATH` | `config/consent-cookies.json` | Cookie bypass config |
+| `API_KEY` | (none) | Optional API key; if set, requires `Authorization: Bearer <key>` header |
 
 ## Code Conventions
 

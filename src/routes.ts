@@ -8,7 +8,7 @@ import { Browser } from "playwright";
 import { fetchPage } from "./browser/index.js";
 import { extractMetadata, extractReadableContent } from "./extraction/index.js";
 import { processRequestSchema } from "./schemas.js";
-import { rateLimiter, validateUrl } from "./security/index.js";
+import { apiKeyAuth, rateLimiter, validateUrl } from "./security/index.js";
 
 /**
  * Creates and configures the Hono application with all routes.
@@ -19,6 +19,10 @@ export function createApp(getBrowser: () => Browser | null) {
 
   // Middleware
   app.use(logger());
+
+  // Apply auth before rate limiting (fail fast if unauthorized)
+  app.use("/process", apiKeyAuth());
+  app.use("/content", apiKeyAuth());
 
   // Rate limit the extraction endpoints (not /health or /ready)
   app.use("/process", rateLimiter());
