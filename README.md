@@ -11,6 +11,7 @@ Features:
 - Bot detection evasion and GDPR consent handling
 - Rate limiting
 - Optional API key authentication
+- OpenAPI 3.1 documentation with Swagger UI
 
 Not implemented:
 - reuse persistent browser connection
@@ -39,6 +40,9 @@ curl -X POST http://localhost:3000/process \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your-secret-api-key" \
   -d '{"url": "https://example.com"}'
+
+# View API documentation
+open http://localhost:3000/docs
 ```
 
 ## Architecture
@@ -73,6 +77,8 @@ Overview:
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window |
 | `CONSENT_COOKIES_PATH` | `config/consent-cookies.json` | Cookie bypass config |
 | `API_KEY` | (none) | Optional API key; if set, requires `Authorization: Bearer <key>` header |
+| `DOCS_USERNAME` | (none) | Optional basic auth username for `/doc` and `/docs` endpoints |
+| `DOCS_PASSWORD` | (none) | Optional basic auth password for `/doc` and `/docs` endpoints |
 | `CLOUDFLARE_TUNNEL_TOKEN` | (none) | Cloudflare Tunnel token for production deployment |
 | `API_HOST` | (none) | Public hostname for Traefik routing (e.g., `metadata.yourdomain.com`) |
 
@@ -130,7 +136,6 @@ curl https://metadata.yourdomain.com/health
 - **Structured logging** - Replace console.log with structured JSON logging for easier debugging and monitoring.
 - **Tests** - Unit tests for extractor, integration tests for API
 - **bruno** - add local api client https://www.usebruno.com/
-- **API Documentation** - document API endpoints
 
 ## Known Issues
 

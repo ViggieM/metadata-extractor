@@ -27,6 +27,8 @@ docker compose build        # Rebuild after code changes
 - `POST /content` - Extract readable article content (Readability + DOMPurify)
 - `GET /health` - Health check
 - `GET /ready` - Readiness check (verifies browser connection)
+- `GET /doc` - OpenAPI 3.1 JSON specification
+- `GET /docs` - Swagger UI for interactive API documentation
 
 Request body: `{ "url": "https://example.com", "timeout": 30000 }` (timeout optional)
 
@@ -72,6 +74,8 @@ src/
 | `RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window |
 | `CONSENT_COOKIES_PATH` | `config/consent-cookies.json` | Cookie bypass config |
 | `API_KEY` | (none) | Optional API key; if set, requires `Authorization: Bearer <key>` header |
+| `DOCS_USERNAME` | (none) | Optional basic auth username for `/doc` and `/docs` endpoints |
+| `DOCS_PASSWORD` | (none) | Optional basic auth password for `/doc` and `/docs` endpoints |
 
 ## Code Conventions
 
