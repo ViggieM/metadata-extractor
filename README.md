@@ -12,6 +12,7 @@ Features:
 - Rate limiting
 - Optional API key authentication
 - OpenAPI 3.1 documentation with Swagger UI
+- Production-ready with Traefik and Cloudflare Zero Trust tunnel support
 
 Not implemented:
 - reuse persistent browser connection
@@ -130,6 +131,33 @@ curl http://localhost:3000/health
 # Test tunnel access
 curl https://metadata.yourdomain.com/health
 ```
+
+## Privacy
+
+### No Data Persistence
+- The service is **stateless** — it doesn't store fetched content, extracted metadata, or user requests
+- Each page fetch creates an **isolated browser context** that is closed immediately after use
+- No databases, caches, or logs retain user-submitted URLs or extracted data
+
+### Security Measures That Support Privacy
+
+1. **SSRF Protection** — Validates all URLs against private/internal IP ranges before fetching. Sub-requests during page load are also validated and blocked if targeting forbidden IPs.
+
+2. **Rate Limiting** — Sliding window rate limiting per IP prevents abuse (default: 5 requests per 60-second window).
+
+3. **Optional API Key Authentication** — When `API_KEY` is set, requires `Authorization: Bearer <key>` header to prevent unauthorized access.
+
+4. **Content Sanitization** — Uses DOMPurify to sanitize extracted content, removing potentially malicious scripts.
+
+### What the Service Does Access
+- Fetches the provided URL using headless Chrome
+- May set consent cookies to bypass cookie dialogs (configured via `consent-cookies.json`)
+- Uses an adblocker to reduce tracking during page fetches
+
+### Recommendations for Operators
+- Deploy behind a reverse proxy with TLS
+- Set `API_KEY` to restrict access
+- Consider network isolation for the Chrome container
 
 ## TODOs
 - **Prometheus metrics** - Request counts, latencies, error rates
