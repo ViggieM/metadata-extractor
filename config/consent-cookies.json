@@ -1,7 +1,7 @@
 {
   "patterns": [
     {
-      "match": ["youtube.com", "google.com"],
+      "match": ["youtube.com"],
       "cookies": [
         {
           "name": "CONSENT",
@@ -13,6 +13,23 @@
           "name": "SOCS",
           "value": "CAISHAgBEhJnd3NfMjAyMzA4MTAtMF9SQzIaAmVuIAEaBgiAo_CmBg",
           "domain": ".youtube.com",
+          "path": "/"
+        }
+      ]
+    },
+    {
+      "match": ["google.com", "goo.gl"],
+      "cookies": [
+        {
+          "name": "SOCS",
+          "value": "CAISNQgEEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjYwMTE4LjA5X3AwGgJkZSACGgYIgIu7ywY",
+          "domain": ".google.com",
+          "path": "/"
+        },
+        {
+          "name": "NID",
+          "value": "528=mhxxHwEoS1QisDVObux5OE_0cchYPpNwalmxhhrCCaXDpQAjv-wbYuXo9ZyjGgiy3PpN6TyTe6pH3pt7S_5CmxBS63kxfzhvJXNUmEylXEBHeV7KYLi_c6bXc2aDwBbi6VFuvsRt1EueQklDPZcENbHNbqP1uMuUNoN1NhPf0sF7-Y3_0nnDNWlAjJWaCALhMf1pvfv7bsTBRh24Rm4U9KXXpRk1tkufoq_5IDbS",
+          "domain": ".google.com",
           "path": "/"
         }
       ]
