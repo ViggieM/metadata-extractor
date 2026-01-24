@@ -48,7 +48,7 @@ src/
 │   ├── index.ts      # Barrel export
 │   ├── metadata.ts   # Metascraper extraction with site-specific plugins
 │   ├── readability.ts# Mozilla Readability + DOMPurify sanitization
-│   └── favicon.ts    # Favicon fetch, compression, and base64 data URI conversion
+│   └── favicon.ts    # Favicon fetch, ICO decoding (icojs), compression, base64 data URI
 └── security/
     ├── index.ts      # Barrel export
     ├── apiKey.ts     # Optional API key authentication (Bearer token)

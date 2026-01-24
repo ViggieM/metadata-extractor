@@ -1,7 +1,8 @@
 // ABOUTME: Favicon fetching and compression module using Sharp.
-// ABOUTME: Fetches favicon URLs, validates against SSRF, resizes to 32x32, compresses to under 3KB.
+// ABOUTME: Fetches favicon URLs, validates against SSRF, resizes to 32x32, compresses to under 3KB. Supports ICO format.
 
 import sharp from "sharp";
+import { isICO, parseICO } from "icojs";
 import { validateUrl } from "../security/ssrf.js";
 
 // Configuration from environment variables
@@ -133,11 +134,40 @@ async function fetchFavicon(url: string): Promise<Buffer> {
 }
 
 /**
+ * Converts an ICO buffer to PNG by selecting the best available image.
+ * Selects the image closest to (but not smaller than) FAVICON_SIZE.
+ */
+async function convertIcoToPng(buffer: Buffer): Promise<Buffer> {
+  const images = await parseICO(buffer, "image/png");
+
+  if (images.length === 0) {
+    throw new Error("ICO file contains no images");
+  }
+
+  // Sort by size descending and pick the best fit for our target size
+  // Prefer images >= FAVICON_SIZE, or the largest available if all are smaller
+  const sorted = [...images].sort((a, b) => b.width - a.width);
+
+  // Find smallest image that's >= FAVICON_SIZE, or fall back to largest
+  const bestFit =
+    sorted.find((img) => img.width >= FAVICON_SIZE && img.height >= FAVICON_SIZE) ||
+    sorted[0];
+
+  return Buffer.from(bestFit.buffer);
+}
+
+/**
  * Compresses a favicon buffer using Sharp.
+ * - Converts ICO format to PNG first if needed
  * - If already small enough (<=3KB), just re-encodes to normalize format
  * - If larger than target size, resizes to 32x32 and compresses
  */
 async function compressFavicon(buffer: Buffer): Promise<Buffer> {
+  // Convert ICO to PNG if needed
+  if (isICO(buffer)) {
+    buffer = await convertIcoToPng(buffer);
+  }
+
   // Get image metadata
   const image = sharp(buffer);
   const metadata = await image.metadata();
