@@ -7,7 +7,7 @@ import { logger } from "hono/logger";
 import { Browser } from "playwright";
 
 import { fetchPage } from "./browser/index.js";
-import { extractMetadata, extractReadableContent } from "./extraction/index.js";
+import { extractMetadata, extractReadableContent, processFavicon } from "./extraction/index.js";
 import {
   ProcessRequestSchema,
   MetadataResponseSchema,
@@ -285,6 +285,15 @@ export function createApp(getBrowser: () => Browser | null) {
 
       // Extract metadata
       const metadata = await extractMetadata(html, finalUrl);
+
+      // Process favicon: fetch, compress, and convert to data URI
+      if (metadata.favicon) {
+        const faviconResult = await processFavicon(metadata.favicon);
+        // Use data URI if successful, otherwise fall back to original URL
+        metadata.favicon = faviconResult.success
+          ? faviconResult.dataUri
+          : faviconResult.originalUrl;
+      }
 
       const duration = Date.now() - startTime;
       console.log(`[Process] Completed in ${duration}ms: ${url}`);

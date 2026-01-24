@@ -47,7 +47,8 @@ src/
 ├── extraction/
 │   ├── index.ts      # Barrel export
 │   ├── metadata.ts   # Metascraper extraction with site-specific plugins
-│   └── readability.ts# Mozilla Readability + DOMPurify sanitization
+│   ├── readability.ts# Mozilla Readability + DOMPurify sanitization
+│   └── favicon.ts    # Favicon fetch, compression, and base64 data URI conversion
 └── security/
     ├── index.ts      # Barrel export
     ├── apiKey.ts     # Optional API key authentication (Bearer token)
@@ -76,6 +77,10 @@ src/
 | `API_KEY` | (none) | Optional API key; if set, requires `Authorization: Bearer <key>` header |
 | `DOCS_USERNAME` | (none) | Optional basic auth username for `/doc` and `/docs` endpoints |
 | `DOCS_PASSWORD` | (none) | Optional basic auth password for `/doc` and `/docs` endpoints |
+| `FAVICON_SIZE` | `32` | Target max dimension in pixels for favicon compression |
+| `FAVICON_MAX_SIZE_BYTES` | `3072` | Max favicon size in bytes (3KB); larger falls back to URL |
+| `FAVICON_OUTPUT_FORMAT` | `png` | Output format for favicon (`png` or `webp`) |
+| `FAVICON_FETCH_TIMEOUT_MS` | `5000` | Timeout for fetching favicon URLs |
 
 ## Code Conventions
 

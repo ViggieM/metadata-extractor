@@ -4,7 +4,7 @@ A Docker-based service that extracts metadata (title, description, keywords) fro
 The code is based on [karakeep](https://github.com/karakeep-app/karakeep), simplified to only provide a REST Endpoint for metadata and content extraction.
 
 Features:
-- Rich metadata extraction via metascraper (title, description, images, author, dates, favicon)
+- Rich metadata extraction via metascraper (title, description, images, author, dates, favicon with automatic compression)
 - Site-specific plugins for YouTube, Amazon, X/Twitter, Spotify, Soundcloud
 - Readable content extraction via `/content` endpoint (Readability.js + DOMPurify)
 - SSRF protection with DNS caching and IP range validation
@@ -80,6 +80,10 @@ Overview:
 | `API_KEY` | (none) | Optional API key; if set, requires `Authorization: Bearer <key>` header |
 | `DOCS_USERNAME` | (none) | Optional basic auth username for `/doc` and `/docs` endpoints |
 | `DOCS_PASSWORD` | (none) | Optional basic auth password for `/doc` and `/docs` endpoints |
+| `FAVICON_SIZE` | `32` | Target max dimension in pixels for favicon compression |
+| `FAVICON_MAX_SIZE_BYTES` | `3072` | Max favicon size in bytes (3KB); larger falls back to URL |
+| `FAVICON_OUTPUT_FORMAT` | `png` | Output format for favicon (`png` or `webp`) |
+| `FAVICON_FETCH_TIMEOUT_MS` | `5000` | Timeout for fetching favicon URLs |
 | `CLOUDFLARE_TUNNEL_TOKEN` | (none) | Cloudflare Tunnel token for production deployment |
 | `API_HOST` | (none) | Public hostname for Traefik routing (e.g., `metadata.yourdomain.com`) |
 
