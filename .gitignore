@@ -3,3 +3,4 @@ dist/
 node_modules/
 .claude/
 .env
+consent-cookies.json
