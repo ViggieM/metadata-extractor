@@ -3,9 +3,9 @@ networks:
 
 services:
   traefik:
-    image: traefik:v3.0
+    image: traefik:v3
     restart: unless-stopped
-    networks: ['metadata-net']
+    networks: ["metadata-net"]
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -16,7 +16,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    networks: ['metadata-net']
+    networks: ["metadata-net"]
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:
       - traefik
@@ -34,12 +34,19 @@ services:
       - chrome.localhost
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${PORT:-3000}/health"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "-q",
+          "--spider",
+          "http://localhost:${PORT:-3000}/health",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
-    networks: ['metadata-net']
+    networks: ["metadata-net"]
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`${API_HOST}`)"
@@ -56,4 +63,4 @@ services:
       - --remote-debugging-address=0.0.0.0
       - --remote-debugging-port=9222
       - --hide-scrollbars
-    networks: ['metadata-net']
+    networks: ["metadata-net"]
