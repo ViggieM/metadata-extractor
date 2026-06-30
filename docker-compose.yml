@@ -9,6 +9,7 @@ services:
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.constraints=Label(`traefik.instance`,`metadata-breader`)"
       - "--entrypoints.web.address=:80"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -48,6 +49,7 @@ services:
       start_period: 10s
     networks: ["metadata-net"]
     labels:
+      - "traefik.instance=metadata-breader"
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`${API_HOST}`)"
       - "traefik.http.routers.api.entrypoints=web"
